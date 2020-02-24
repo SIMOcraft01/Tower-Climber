@@ -1,0 +1,125 @@
+<html>
+<head>
+	<style>
+	*{padding: 0; margin:0;}
+	canvas{ background: #eee; display: block; margin: 0 auto;}
+	</style>
+</head>
+
+<body>
+<canvas id= "myCanvas" width="600" height="700"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+document.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mousedown", getPosition, false);
+canvas.addEventListener("mouseup", getPosition2, false);
+
+var startPressed = false;
+var optionPressed = false;
+var mouseIsDown = false;
+var pX = 400;
+var pY = 300;
+
+function getPosition2(event){
+	mouseIsDown = false;
+}
+
+function getPosition(event)
+{
+	mouseIsDown = true;
+}
+
+function mouseMoveHandler(e) {
+    pX = e.clientX - canvas.offsetLeft;
+    pY = e.clientY - canvas.offsetTop;
+}
+
+function startScreen()
+{
+	ctx.font = "60px Arial";
+	ctx.fillStyle = "rgb(0,255,0)"
+	ctx.fillText("Fortress", 200, 200);
+	ctx.fillText("Climber", 300, 280);
+	
+	if(pX >= 225 && pX <= 375 && pY >= 500 && pY <= 600)
+	{
+		ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Start", 237, 560);
+		if(mouseIsDown)
+		{
+			startPressed = true;
+		}	
+	}
+	else
+	{
+		ctx.fillStyle = "rgb(255,0,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(0,0,255)";
+		ctx.fillText("Start", 237, 560);
+	}
+	if(pX >= 490 && pX <= 590 && pY >= 500 && pY <= 550)
+	{
+		ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(490, 500, 100, 50);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Option", 280, 560);
+		if(mouseIsDown)
+		{
+			optionPressed = true;
+		}
+	}
+	else
+	{
+		ctx.fillStyle = "rgb(255,0,0)";
+		ctx.fillRect(490, 500, 100, 50);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(0,0,255)";
+		ctx.fillText("Option", 280, 560);
+	}
+}
+
+function game()
+{
+	ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(490, 500, 100, 50);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Option", 280, 560);
+}
+
+function optionScreen()
+{
+	ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Start", 237, 560);
+}
+
+function draw()
+{
+	ctx.clearRect(0,0,600,700);
+	startScreen();
+	if(startPressed)
+	{
+		ctx.clearRect(0,0,600,700);
+		game();
+	}
+	if(optionPressed)
+	{
+		ctx.clearRect(0,0,600,700);
+		optionScreen();
+	}
+}
+
+setInterval(draw, 2);
+
+</script>
+</body>
+</html>
