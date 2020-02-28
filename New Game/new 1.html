@@ -1,0 +1,296 @@
+<html>
+<head>
+	<style>
+	*{padding: 0; margin:0;}
+	canvas{ background: #eee; display: block; margin: 0 auto;}
+	</style>
+</head>
+
+<body>
+<canvas id= "myCanvas" width="600" height="700"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+document.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mousedown", getPosition, false);
+canvas.addEventListener("mouseup", getPosition2, false);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+
+
+var hasStarted = false;
+var optionPressed = false;
+var mouseIsDown = false;
+var pX = 400;
+var pY = 300;
+
+var leftPressed = false;
+var rightPressed = false;
+var upPressed = false;
+var downPressed = false;
+var isFacingDown = false;
+var isFacingForward = false;
+var isFacingLeft = false;
+var isFacingRight = false;
+var counter = 0;
+
+
+var dude = new Image();
+dude.scr = "stillright.png";
+
+function keyDownHandler(e){
+	if(e.keyCode == 39){
+	rightPressed = true;
+	isFacingRight = true;
+	isFacingDown = false;
+	isFacingLeft = false;
+	isFacingForward = false;
+	}
+	else if(e.keyCode == 37)
+	{
+	leftPressed = true;
+	isFacingLeft = true;
+	isFacingDown = false;
+	isFacingForward = false;
+	isFacingRight = false;
+	}
+	else if(e.keyCode == 40)
+	{
+	downPressed = true;
+	isFacingForward = false;
+	isFacingDown = true;
+	isFacingLeft = false;
+	isFacingRight = false;
+	}
+	else if(e.keyCode == 38)
+	{
+	upPressed = true;
+	isFacingDown = false;
+	isFacingLeft = false;
+	isFacingForward = true;
+	isFacingRight = false;
+	}
+	else if(e.keyCode == 32)
+	{
+	fire = true;
+	}
+}
+function keyUpHandler(e){
+	if(e.keyCode == 39){
+	rightPressed = false;
+	}
+	else if(e.keyCode == 37)
+	{
+	leftPressed = false;
+	}
+	else if(e.keyCode == 40)
+	{
+	downPressed = false;
+	}
+	else if(e.keyCode == 38)
+	{
+	upPressed = false;
+	}
+	else if(e.keyCode == 32)
+	{
+	fire = false;
+	}
+}
+
+function drawImageRot(img,x,y,width,height,deg){
+
+    //Convert degrees to radian 
+    var rad = deg * Math.PI / 180;
+
+    //Set the origin to the center of the image
+    ctx.translate(x + width / 2, y + height / 2);
+
+    //Rotate the canvas around the origin
+    ctx.rotate(rad);
+
+    //draw the image    
+    ctx.drawImage(img,width / 2 * (-1),height / 2 * (-1),width,height);
+
+    //reset the canvas  
+    ctx.rotate(rad * ( -1 ) );
+    ctx.translate((x + width / 2) * (-1), (y + height / 2) * (-1));
+}
+
+function animate()
+{
+	if(counter < 1)
+	{
+		dude.src = "stillright.png";
+	}
+	else if(isFacingForward)
+	{
+	   if(counter  < 25)
+	   {
+			dude.src = "jumpright.png";
+	   }
+	}
+	else if (isFacingRight)
+	{
+		if(counter  < 25)
+	   {
+			dude.src = "right1.png";
+	   }
+	   else if(counter < 50)
+	   {
+			dude.src = "right2.png";
+	   }
+	   else if(counter < 75)
+	   {
+			dude.src = "right3.png";
+	   }
+	}
+	else if (isFacingLeft)
+	{
+		if(counter  < 25)
+	   {
+			dude.src = "left1.png";
+	   }
+	   else if(counter < 50)
+	   {
+			dude.src = "left2.png";
+	   }
+	   else if(counter < 75)
+	   {
+			dude.src = "left3.png";
+	   }
+	}
+}
+
+
+
+
+
+
+function getPosition2(event){
+	mouseIsDown = false;
+}
+
+function getPosition(event)
+{
+	mouseIsDown = true;
+}
+
+function mouseMoveHandler(e) {
+    pX = e.clientX - canvas.offsetLeft;
+    pY = e.clientY - canvas.offsetTop;
+}
+
+function startScreen()
+{
+	ctx.font = "60px Arial";
+	ctx.fillStyle = "rgb(0,255,0)"
+	ctx.fillText("Fortress", 200, 200);
+	ctx.fillText("Climber", 300, 280);
+	
+	if(pX >= 225 && pX <= 375 && pY >= 500 && pY <= 600)
+	{
+		ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Start", 237, 560);
+		if(mouseIsDown)
+		{
+			hasStarted = true;
+		}	
+	}
+	else
+	{
+		ctx.fillStyle = "rgb(255,0,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(0,0,255)";
+		ctx.fillText("Start", 237, 560);
+	}
+	if(pX >= 490 && pX <= 590 && pY >= 500 && pY <= 550)
+	{
+		ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(490, 500, 100, 50);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Option", 280, 560);
+		if(mouseIsDown)
+		{
+			optionPressed = true;
+		}
+	}
+	else
+	{
+		ctx.fillStyle = "rgb(255,0,0)";
+		ctx.fillRect(490, 500, 100, 50);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(0,0,255)";
+		ctx.fillText("Option", 280, 560);
+	}
+}
+
+
+function optionScreen()
+{
+	ctx.fillStyle = "rgb(0,255,0)";
+		ctx.fillRect(225, 500, 150, 100);
+		ctx.font = "60px Arial";
+		ctx.fillStyle = "rgb(255,255,0)";
+		ctx.fillText("Start", 237, 560);
+}
+
+
+
+function draw()
+{
+	ctx.clearRect(0,0,600,700);
+	if(!hasStarted)
+	{
+		startScreen();
+	}
+	if(hasStarted)
+	{
+		animate();
+		drawImageRot(dude, 200, 200, dude.width, dude.height, 0);
+		if(counter >= 100)
+		{
+			counter  = 0;
+		}
+
+		if(downPressed)
+		{
+			//charY += 1;
+			counter++;
+			console.log("down is being pressed");
+		}
+		else if(upPressed)
+		{
+			//charY -= 1;
+			counter++;
+		}
+		else if(leftPressed)
+		{
+			//charX -= 1;
+			counter++;
+		}
+		else if(rightPressed)
+		{
+			//charX += 1;
+			counter++;
+		}
+		console.log("counter is: " + counter);
+		///requestAnimationFrame(draw);
+	}
+	if(optionPressed)
+	{
+		ctx.clearRect(0,0,600,700);
+		optionScreen();
+	}
+}
+
+setInterval(draw, 1000/250);
+
+</script>
+</body>
+</html>
