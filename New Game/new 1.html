@@ -24,7 +24,8 @@ var optionPressed = false;
 var mouseIsDown = false;
 var pX = 400;
 var pY = 300;
-
+var x = 100;
+var y = 100;
 var leftPressed = false;
 var rightPressed = false;
 var upPressed = false;
@@ -34,6 +35,10 @@ var isFacingForward = false;
 var isFacingLeft = false;
 var isFacingRight = false;
 var counter = 0;
+var speedY = 30;
+var acc = 2
+var lastTime = 0;
+var newTime = 0;
 
 
 var dude = new Image();
@@ -125,37 +130,38 @@ function animate()
 	}
 	else if(isFacingForward)
 	{
-	   if(counter  < 25)
+	   if(counter  < 25*.6)
 	   {
 			dude.src = "jumpright.png";
 	   }
 	}
 	else if (isFacingRight)
 	{
-		if(counter  < 25)
+		if(counter  < 25*.6)
 	   {
 			dude.src = "right1.png";
 	   }
-	   else if(counter < 50)
+	   else if(counter < 50*.6)
 	   {
 			dude.src = "right2.png";
 	   }
-	   else if(counter < 75)
+	   else if(counter < 75*.6)
 	   {
 			dude.src = "right3.png";
 	   }
 	}
 	else if (isFacingLeft)
 	{
-		if(counter  < 25)
+		if(counter  < 25*.6)
 	   {
 			dude.src = "left1.png";
+			
 	   }
-	   else if(counter < 50)
+	   else if(counter < 50*.6)
 	   {
 			dude.src = "left2.png";
 	   }
-	   else if(counter < 75)
+	   else if(counter < 75*.6)
 	   {
 			dude.src = "left3.png";
 	   }
@@ -240,7 +246,15 @@ function optionScreen()
 		ctx.fillText("Start", 237, 560);
 }
 
+function time()
+{
+	
+}
 
+function jump()
+{
+	y = 
+}
 
 function draw()
 {
@@ -252,8 +266,8 @@ function draw()
 	if(hasStarted)
 	{
 		animate();
-		drawImageRot(dude, 200, 200, dude.width, dude.height, 0);
-		if(counter >= 100)
+		drawImageRot(dude, x, y, dude.width, dude.height, 0);
+		if(counter >= 100*.6)
 		{
 			counter  = 0;
 		}
@@ -268,16 +282,19 @@ function draw()
 		{
 			//charY -= 1;
 			counter++;
+			jump();
 		}
 		else if(leftPressed)
 		{
 			//charX -= 1;
 			counter++;
+			x+= 2;
 		}
 		else if(rightPressed)
 		{
 			//charX += 1;
 			counter++;
+			x+= 2;
 		}
 		console.log("counter is: " + counter);
 		///requestAnimationFrame(draw);
@@ -289,7 +306,7 @@ function draw()
 	}
 }
 
-setInterval(draw, 1000/250);
+setInterval(draw, 16.6);
 
 </script>
 </body>
