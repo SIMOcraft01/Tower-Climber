@@ -19,13 +19,17 @@ document.addEventListener("keyup", keyUpHandler, false);
 
 
 
+var mseconds = new Date();
+var seconds = new Date();
 var hasStarted = false;
 var optionPressed = false;
 var mouseIsDown = false;
 var pX = 400;
 var pY = 300;
 var x = 100;
-var y = 100;
+var y = 500;
+var lastY = 0;
+var top = false;
 var leftPressed = false;
 var rightPressed = false;
 var upPressed = false;
@@ -34,11 +38,16 @@ var isFacingDown = false;
 var isFacingForward = false;
 var isFacingLeft = false;
 var isFacingRight = false;
+var lastFacingWasRight = true;
+var fire = false;
+var gun = false
 var counter = 0;
-var speedY = 30;
-var acc = 2
+var canAnimate = true;
+var speed = 30;
+var acc = 3;
 var lastTime = 0;
 var newTime = 0;
+var currentTime = Date.now();
 
 
 var dude = new Image();
@@ -48,61 +57,60 @@ function keyDownHandler(e){
 	if(e.keyCode == 39){
 	rightPressed = true;
 	isFacingRight = true;
-	isFacingDown = false;
-	isFacingLeft = false;
-	isFacingForward = false;
+	lastFacingWasRight = true;
 	}
 	else if(e.keyCode == 37)
 	{
 	leftPressed = true;
 	isFacingLeft = true;
-	isFacingDown = false;
-	isFacingForward = false;
-	isFacingRight = false;
+	lastFacingWasRight = false;
 	}
 	else if(e.keyCode == 40)
 	{
 	downPressed = true;
-	isFacingForward = false;
 	isFacingDown = true;
-	isFacingLeft = false;
-	isFacingRight = false;
 	}
 	else if(e.keyCode == 38)
 	{
 	upPressed = true;
-	isFacingDown = false;
-	isFacingLeft = false;
 	isFacingForward = true;
-	isFacingRight = false;
 	}
 	else if(e.keyCode == 32)
 	{
 	fire = true;
+	gun = true;
 	}
 }
 function keyUpHandler(e){
 	if(e.keyCode == 39){
 	rightPressed = false;
+	isFacingRight = false;
+	counter = 0;
 	}
 	else if(e.keyCode == 37)
 	{
 	leftPressed = false;
+	isFacingLeft = false;
+	counter = 0;
 	}
 	else if(e.keyCode == 40)
 	{
 	downPressed = false;
+	isFacingDown = false;
+	counter = 0;
 	}
 	else if(e.keyCode == 38)
 	{
-	upPressed = false;
+	upPressed = true;
+	isFacingForward = true;
+	counter = 0;
 	}
 	else if(e.keyCode == 32)
 	{
 	fire = false;
+	gun = false;
 	}
 }
-
 function drawImageRot(img,x,y,width,height,deg){
 
     //Convert degrees to radian 
@@ -124,48 +132,88 @@ function drawImageRot(img,x,y,width,height,deg){
 
 function animate()
 {
-	if(counter < 1)
-	{
-		dude.src = "stillright.png";
-	}
-	else if(isFacingForward)
-	{
-	   if(counter  < 25*.6)
-	   {
-			dude.src = "jumpright.png";
-	   }
-	}
-	else if (isFacingRight)
-	{
-		if(counter  < 25*.6)
-	   {
-			dude.src = "right1.png";
-	   }
-	   else if(counter < 50*.6)
-	   {
-			dude.src = "right2.png";
-	   }
-	   else if(counter < 75*.6)
-	   {
-			dude.src = "right3.png";
-	   }
-	}
-	else if (isFacingLeft)
-	{
-		if(counter  < 25*.6)
-	   {
-			dude.src = "left1.png";
+		if(counter < 1 && !isFacingForward && !gun && lastFacingWasRight)
+		{
+			dude.src = "stillright.png";
+		}
+		if(counter < 1 && !isFacingForward && !gun && !lastFacingWasRight)
+		{
+			dude.src = "stillleft.png";
+		}
+		else if (isFacingRight && gun)
+		{
+			if(counter  < 25*.6)
+			{
+				dude.src = "rightgun1.png";
+			}
+			else if(counter < 50*.6)
+			{
+				dude.src = "rightgun2.png";
+			}
+			else if(counter < 75*.6)
+			{
+				dude.src = "rightgun3.png";
+			}
+		}
+		else if (isFacingRight)
+		{
+			if(counter  < 25*.6)
+			{
+				dude.src = "right1.png";
+			}
+			else if(counter < 50*.6)
+			{
+				dude.src = "right2.png";
+			}
+			else if(counter < 75*.6)
+			{
+				dude.src = "right3.png";
+			}
+		}
+		else if (isFacingLeft && gun)
+		{
+			if(counter  < 25*.6)
+			{
+				dude.src = "leftgun1.png";
 			
-	   }
-	   else if(counter < 50*.6)
-	   {
-			dude.src = "left2.png";
-	   }
-	   else if(counter < 75*.6)
-	   {
-			dude.src = "left3.png";
-	   }
-	}
+			}
+			else if(counter < 50*.6)
+			{
+				dude.src = "leftgun2.png";
+			}
+			else if(counter < 75*.6)
+			{
+					dude.src = "leftgun3.png";
+			}
+		}
+		else if (isFacingLeft)
+		{
+			if(counter  < 25*.6)
+			{
+				dude.src = "left1.png";
+			
+			}
+			else if(counter < 50*.6)
+			{
+				dude.src = "left2.png";
+			}
+			else if(counter < 75*.6)
+			{
+					dude.src = "left3.png";
+			}
+		}
+		else if(isFacingForward && lastFacingWasRight)
+		{
+			dude.src = "jumpright.png";
+		}
+		else if(isFacingForward && !lastFacingWasRight)
+		{
+			dude.src = "jumpleft.png";
+		}
+		else if(gun)
+		{
+			dude.src = "stillrightgun.png";
+		}
 }
 
 
@@ -246,14 +294,33 @@ function optionScreen()
 		ctx.fillText("Start", 237, 560);
 }
 
-function time()
-{
-	
-}
 
 function jump()
 {
-	y = 
+	if(!top)
+	{
+		speed -= acc;
+		y += speed;
+		if(speed == 0)
+		{
+			top = true;
+		}
+	}
+	if(top)
+	{
+		speed -= acc;
+		y -= speed;
+		if(y == 500)
+		{
+			upPressed = false;
+			isFacingForward = false;
+			speed = 30;
+			top = false;
+			canAnimate = true;
+			counter = 0;
+			animate();
+		}
+	}
 }
 
 function draw()
@@ -281,16 +348,17 @@ function draw()
 		else if(upPressed)
 		{
 			//charY -= 1;
-			counter++;
+			canAnimate = false;
+			lastY = y;
 			jump();
 		}
-		else if(leftPressed)
+		if(leftPressed)
 		{
 			//charX -= 1;
 			counter++;
-			x+= 2;
+			x-= 2;
 		}
-		else if(rightPressed)
+		if(rightPressed)
 		{
 			//charX += 1;
 			counter++;
